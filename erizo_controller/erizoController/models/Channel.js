@@ -62,6 +62,7 @@ class Channel extends events.EventEmitter {
         logger.objectToLog(this.token));
       this.emit('disconnect');
     }, RECONNECTION_TIMEOUT);
+    this.emit('peerReconnecting');
   }
 
   socketOn(eventName, listener) {

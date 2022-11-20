@@ -359,6 +359,7 @@ const listen = () => {
           maxVideoBW: global.config.erizoController.maxVideoBW,
           iceServers: global.config.erizoController.iceServers });
         log.info('message: sent connected message');
+        room.sendMessage('onPeerConnected', {type: 'onPeerConnected', msg: `${client.id} connected to room`});
       } catch (e) {
         log.warn('message: error creating Room or Client, error:', e,
           logger.objectToLog(options), logger.objectToLog(options.metadata));

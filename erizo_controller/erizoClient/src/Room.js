@@ -301,6 +301,12 @@ const Room = (altIo, altConnectionHelpers, altConnectionManager, specInput) => {
     stream.pc.addStream(stream);
   };
 
+  const socketOnPeerConnected = (arg) => {
+    const { message } = arg;
+    const evt = StreamEvent({ type: 'peer-connected', message });
+    that.dispatchEvent(evt);
+  }
+
   // We receive an event with a new stream in the room.
   // type can be "media" or "data"
 
@@ -1079,6 +1085,7 @@ const Room = (altIo, altConnectionHelpers, altConnectionManager, specInput) => {
 
   that.on('room-disconnected', clearAll);
 
+  socket.on('onPeerConnected', socketEventToArgs.bind(null, socketOnPeerConnected));
   socket.on('onAddStream', socketEventToArgs.bind(null, socketOnAddStream));
   socket.on('stream_message_erizo', socketEventToArgs.bind(null, socketOnStreamMessageFromErizo));
   socket.on('stream_message_p2p', socketEventToArgs.bind(null, socketOnStreamMessageFromP2P));

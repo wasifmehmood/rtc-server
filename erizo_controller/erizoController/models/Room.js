@@ -34,6 +34,7 @@ class Room extends events.EventEmitter {
     const client = new Client(channel, token, options, this);
     client.on('disconnect', this.onClientDisconnected.bind(this, client));
     this.clients.set(client.id, client);
+    channel.on('peerReconnecting', this.onClientReconnecting.bind(this, client.id));
     return client;
   }
 
@@ -48,6 +49,14 @@ class Room extends events.EventEmitter {
       this.controller.removeClient(id);
     }
     return this.clients.delete(id);
+  }
+
+  onClientReconnecting(clientId){
+    this.streamManager.forEachPublishedStream((stream) => {
+      if(stream.clientId === clientId) {
+        this.sendMessage('peerReconnecting', {type: 'peerReconnecting', streamId: stream.id});
+      }
+    });
   }
 
   onClientDisconnected() {

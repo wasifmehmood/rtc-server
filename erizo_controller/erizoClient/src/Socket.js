@@ -98,6 +98,8 @@ const Socket = (newIo) => {
       callback(response);
     });
 
+    reliableSocket.on('onPeerConnected', emit.bind(that, 'onPeerConnected'));
+
     reliableSocket.on('onAddStream', emit.bind(that, 'onAddStream'));
 
     reliableSocket.on('stream_message_erizo', emit.bind(that, 'stream_message_erizo'));
